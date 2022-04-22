@@ -1,9 +1,10 @@
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LogoutView, LoginView  # Do not delete me.
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
+
+from .forms import UserCreationForm
 
 # Create your views here.
 

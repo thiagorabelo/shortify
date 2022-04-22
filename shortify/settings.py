@@ -148,5 +148,15 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+# https://docs.djangoproject.com/en/3.2/ref/settings/#login-redirect-url
+# https://docs.djangoproject.com/en/3.2/ref/settings/#login-url
+# https://docs.djangoproject.com/en/3.2/ref/settings/#logout-redirect-url
+
 LOGIN_REDIRECT_URL = reverse_lazy("short:list")
 LOGIN_URL = reverse_lazy("login")
+LOGOUT_REDIRECT_URL = reverse_lazy("login")
+
+
+# https://docs.djangoproject.com/en/3.2/topics/auth/customizing/#substituting-a-custom-user-model
+
+# AUTH_USER_MODEL = 'accounts.User'
