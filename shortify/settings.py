@@ -104,6 +104,20 @@ DATABASES = {
 }
 
 
+# https://docs.djangoproject.com/en/3.2/topics/email/
+
+EMAIL_HOST = os.getenv("EMAIL_HOST")
+EMAIL_PORT = os.getenv("EMAIL_PORT")
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+EMAIL_SUBJECT_PREFIX = os.getenv("EMAIL_SUBJECT_PREFIX")
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS") == "1"
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+if DEBUG and not EMAIL_HOST:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
