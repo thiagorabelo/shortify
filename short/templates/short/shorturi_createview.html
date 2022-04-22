@@ -10,30 +10,35 @@
         <h2 class="fs-5 fw-semibold">Create Short URI</h2>
     </div>
 
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+        </symbol>
+    </svg>
+
     <form action="." method="post" class="p-3">
         {% csrf_token %}
 
         {% for error in form.non_field_errors %}
-            {{ errors }}
+            <div class="alert alert-danger d-flex align-items-center" role="alert">
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
+                    <use xlink:href="#exclamation-triangle-fill"/>
+                </svg>
+                <div>{{ error }}</div>
+            </div>
         {% endfor %}
 
         {% with WIDGET_ERROR_CLASS='is-invalid' %}
-            <div class="mb-3">
-                <label for="{{ form.full_uri.id_for_label }}" class="form-label">Full URI</label>
-                {% render_field form.full_uri class+="form-control" %}
-                <div class="form-text">{{ form.full_uri.help_text }}</div>
-                {% for error in form.full_uri.errors %}
-                    <div class="invalid-feedback">{{ error }}</div>
-                {% endfor %}
-            </div>
-            <div class="mb-3">
-                <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
-                {% render_field form.description class+="form-control" %}
-                <div class="form-text">{{ form.description.help_text }}</div>
-                {% for error in form.description.errors %}
-                    <div class="invalid-feedback">{{ error }}</div>
-                {% endfor %}
-            </div>
+            {% for field in form %}
+                <div class="mb-3">
+                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                    {% render_field field class+="form-control" %}
+                    <div class="form-text">{{ field.help_text }}</div>
+                    {% for error in field.errors %}
+                        <div class="invalid-feedback">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
         {% endwith %}
         <button type="submit" class="btn btn-outline-success">Submit</button>
     </form>

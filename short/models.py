@@ -13,7 +13,7 @@ class ShortURI(models.Model):
     full_uri = models.URLField("Full URI", help_text="The actual URI", blank=False, max_length=255)
     uri_hash = models.CharField("Hash Code", unique=True, max_length=10, blank=False)
     created_at = models.DateTimeField("Created at", auto_now_add=True)
-    description = models.CharField("Description", help_text="Helps you remember what this URI is about", max_length=255, blank=True)
+    description = models.CharField("Description", help_text="Helps you remember what this URI is about", max_length=255, blank=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
 
     class Meta:
