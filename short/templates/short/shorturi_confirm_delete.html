@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block "title" %}Delete a Short URI - {{ block.super }}{%endblock%}
+
+{% block "content" %}
+<div class="d-flex flex-column flex-fill align-items-stretch flex-shrink-0 bg-white">
+    <div class="d-flex justify-content-between align-items-center flex-shrink-0
+                p-3 link-dark text-decoration-none border-bottom">
+        <h2 class="fs-5 fw-semibold">Confirm deletion</h2>
+    </div>
+    <form action="." method="post" class="p-3">
+        {% csrf_token %}
+
+        <p>Are you sure you want to delete the short URI below?</p>
+
+        <table class="table">
+            <caption>Short URI data</caption>
+            <tr>
+                <th scope="row">Description:</th>
+                <td>{{ object.description }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Full URI:</th>
+                <td>{{ object.full_uri }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Short URI:</th>
+                <td>{{ request.scheme }}://{{ request.get_host }}{% url 'short:redirect' object.uri_hash %}</td>
+            </tr>
+            <tr>
+                <th scope="row">Created at:</th>
+                <td>{{ object.created_at }}</td>
+            </tr>
+        </table>
+
+        <button type="submit" class="btn btn-outline-danger">Submit</button>
+    </form>
+{% endblock %}
