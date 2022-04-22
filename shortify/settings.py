@@ -81,7 +81,6 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
 
                 'shortify.context_processors.get_hostname',
-                'shortify.context_processors.get_current_year',
             ],
         },
     },

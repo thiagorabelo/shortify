@@ -155,7 +155,7 @@
                 {% block "content" %}{% endblock %}
             </main>
 
-            <footer class="pt-3 mt-4 text-muted border-top">© {{ current_year }} - {{ hostname }}</footer>
+            <footer class="pt-3 mt-4 text-muted border-top">© {% now "Y" %} - {{ hostname }}</footer>
         </div>
 
         <!-- Option 1: Bootstrap Bundle with Popper -->
