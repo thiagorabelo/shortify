@@ -132,8 +132,8 @@
                             <span class="me-2">{{ request.user.username }}</span>
                             <a class="btn btn-sm btn-outline-danger" href="{% url 'logout' %}">Sign out</a>
                         {% else %}{% block "sign_in_up" %}
-                            <a class="btn btn-sm btn-outline-primary me-3" href="#">Sign in</a>
-                            <a class="btn btn-sm btn-outline-success" href="#">Sign up</a>
+                            <a class="btn btn-sm btn-outline-primary me-3" href="{% url 'login' %}">Sign in</a>
+                            <a class="btn btn-sm btn-outline-success" href="{% url 'accounts:signup' %}">Sign up</a>
                         {% endblock %}{% endif %}
                     </div>
                 </div>
