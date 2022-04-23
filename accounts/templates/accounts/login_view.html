@@ -44,5 +44,11 @@
             {% endwith %}
             <button type="submit" class="btn btn-outline-primary">Submit</button>
         </form>
+
+        <div class="d-flex mb-3 p-3 justify-content-end">
+            <a href="{% url 'accounts:password_reset' %}" class="text-decoration-none">
+                Change password
+            </a>
+        </div>
     </div>
 {% endblock %}
