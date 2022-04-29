@@ -92,16 +92,71 @@ WSGI_APPLICATION = 'shortify.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'shortify',
-        'HOST': os.getenv("DATABASE_HOST"),
-        'USER': os.getenv("DATABASE_USER"),
-        'PASSWORD': os.getenv("DATABASE_PASSWORD"),
-        'PORT': os.getenv("DATABASE_PORT")
+
+def get_databases():
+    import itertools
+
+    # The Default database. Must be configured normaly.
+    databases = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv("DATABASE_NAME", "shortify"),
+            'HOST': os.getenv("DATABASE_HOST"),
+            'USER': os.getenv("DATABASE_USER"),
+            'PASSWORD': os.getenv("DATABASE_PASSWORD"),
+            'PORT': os.getenv("DATABASE_PORT")
+        },
     }
-}
+
+    counter = itertools.count(start=1)
+
+    while (num := next(counter)) and (key := os.getenv(f"DATABASE_REPLICA_{num}")):
+        # Replica databases.
+        # When configured, all writes will be sent to the default database,
+        # but reads will be routed between the default databases and replicas.
+        #
+        # Environment variables have the following format:
+        #   - DATABASE_REPLICA_{num}_NAME or DATABASE_NAME (default: shortify)
+        #   - DATABASE_REPLICA_{num}_HOST
+        #   - DATABASE_REPLICA_{num}_USER
+        #   - DATABASE_REPLICA_{num}_PASSWORD
+        #   - DATABASE_REPLICA_{num}_PORT
+        #
+        # where {num} is a number starting at 1 and incremented for each replica.
+        #
+        # For example a configuration with two replicas:
+        #
+        # DATABASE_REPLICA_1_HOST=10.0.1.2
+        # DATABASE_REPLICA_1_USER=db_user
+        # DATABASE_REPLICA_1_PASSWORD=db_password
+        # DATABASE_REPLICA_1_PORT=5432
+        #
+        # DATABASE_REPLICA_2_HOST=10.0.1.3
+        # DATABASE_REPLICA_2_USER=db_user
+        # DATABASE_REPLICA_2_PASSWORD=db_password
+        # DATABASE_REPLICA_2_PORT=5432
+
+        databases |= {
+            key: {
+                'ENGINE': 'django.db.backends.postgresql',
+                'NAME': os.getenv(f"DATABASE_REPLICA_{num}_NAME",
+                                  os.getenv("DATABASE_NAME", "shortify")),
+                'HOST': os.getenv(f"DATABASE_REPLICA_{num}_HOST"),
+                'USER': os.getenv(f"DATABASE_REPLICA_{num}_USER"),
+                'PASSWORD': os.getenv(f"DATABASE_REPLICA_{num}_PASSWORD"),
+                'PORT': os.getenv(f"DATABASE_REPLICA_{num}_PORT"),
+            }
+        }
+
+    return databases
+
+
+# Assign database configuration.
+DATABASES = get_databases()
+
+# If you only have one database, there is no need for routing.
+if len(DATABASES.keys()) > 1:
+    DATABASE_ROUTERS = ['shortify.pg_router.PrimaryReplicaRouter']
 
 
 # https://docs.djangoproject.com/en/3.2/topics/email/

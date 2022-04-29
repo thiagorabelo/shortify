@@ -7,6 +7,6 @@
     "emmet.includeLanguages": {
         "django-html": "html"
     },
-    "git.autoRepositoryDetection": "openEditors",
+    "git.autoRepositoryDetection": false,
     "debug.toolBarLocation": "docked"
 }
